@@ -28,9 +28,9 @@ jobs:
           echo "### Layer 1: SHA-256 Checksums" >> $GITHUB_STEP_SUMMARY
 
           declare -A EXPECTED_CHECKSUMS
-          EXPECTED_CHECKSUMS["vitest.config.ts"]="REPLACE_WITH_ACTUAL_CHECKSUM"
-          EXPECTED_CHECKSUMS["tsconfig.json"]="REPLACE_WITH_ACTUAL_CHECKSUM"
-          EXPECTED_CHECKSUMS["src/setupTests.ts"]="REPLACE_WITH_ACTUAL_CHECKSUM"
+          EXPECTED_CHECKSUMS["vitest.config.ts"]="75d1db451221445c6bfe842cbf876ddd5fec9da420b1b43b92f1d358f7978530"
+          EXPECTED_CHECKSUMS["tsconfig.json"]="9c9d1292b623e2ddbf26ba2fe1843441ed98a82a17604040eff2d1d5de60ad35"
+          EXPECTED_CHECKSUMS["src/setupTests.ts"]="386913fe21b895d65940474523b9de776f1b63e279f2ca513aa8e726375bda7f"
 
           for file in "vitest.config.ts" "tsconfig.json" "src/setupTests.ts"; do
             if [ ! -f "$file" ]; then
@@ -108,8 +108,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -141,8 +141,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
