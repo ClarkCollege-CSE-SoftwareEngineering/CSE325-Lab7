@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatCurrency, formatDate, formatFileSize } from '../formatters';
+import { formatCurrency, formatFileSize } from '../formatters';
 
 describe('formatCurrency', () => {
   it('formats a positive number as USD', () => {
