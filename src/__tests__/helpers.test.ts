@@ -1,1 +1,5 @@
-// Add your helper function tests here during the lab
+import { describe, it } from "vitest";
+
+describe("helpers", () => {
+  it.todo("add helper function tests during the lab");
+});
