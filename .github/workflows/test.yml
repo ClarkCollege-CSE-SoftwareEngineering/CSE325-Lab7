@@ -108,8 +108,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -141,8 +141,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -165,6 +165,7 @@ jobs:
             "tsconfig.json"
             "CONTRIBUTING.md"
             "REVIEW_CHECKLIST.md"
+            "LAB_INSTRUCTIONS.md"
             "README.md"
           )
 
@@ -289,6 +290,14 @@ jobs:
 
           README_ISSUES=""
 
+          # Check that student renamed lab instructions and created a new README
+          if [ -f "LAB_INSTRUCTIONS.md" ]; then
+            echo "✅ LAB_INSTRUCTIONS.md found (lab instructions renamed)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ LAB_INSTRUCTIONS.md not found — README may still be the lab instructions" >> $GITHUB_STEP_SUMMARY
+            README_ISSUES="$README_ISSUES renamed"
+          fi
+
           if grep -qi "reflection" README.md; then
             echo "✅ Reflection section found" >> $GITHUB_STEP_SUMMARY
           else
@@ -303,19 +312,11 @@ jobs:
             README_ISSUES="$README_ISSUES concepts"
           fi
 
-          if grep -qi "git log\|graph\|branch" README.md; then
+          if grep -qi "git log\|oneline\|graph" README.md; then
             echo "✅ Git log section found" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ Git log section may be missing" >> $GITHUB_STEP_SUMMARY
             README_ISSUES="$README_ISSUES gitlog"
-          fi
-
-          WORD_COUNT=$(wc -w < README.md)
-          if [ "$WORD_COUNT" -ge 300 ]; then
-            echo "✅ README has sufficient content ($WORD_COUNT words)" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "⚠️ README may be too short ($WORD_COUNT words, aim for 300+)" >> $GITHUB_STEP_SUMMARY
-            README_ISSUES="$README_ISSUES length"
           fi
 
           if grep -qi "name:\|author:\|by:" README.md; then
@@ -369,12 +370,13 @@ jobs:
             CONTRIB_ISSUES="$CONTRIB_ISSUES pr"
           fi
 
-          WORD_COUNT=$(wc -w < CONTRIBUTING.md)
-          if [ "$WORD_COUNT" -ge 100 ]; then
-            echo "✅ CONTRIBUTING.md has sufficient content ($WORD_COUNT words)" >> $GITHUB_STEP_SUMMARY
+          # Check that HTML comment placeholders have been replaced with real content
+          if grep -q "<!--" CONTRIBUTING.md; then
+            PLACEHOLDER_COUNT=$(grep -c "<!--" CONTRIBUTING.md)
+            echo "⚠️ $PLACEHOLDER_COUNT template placeholder(s) still present — sections not filled in" >> $GITHUB_STEP_SUMMARY
+            CONTRIB_ISSUES="$CONTRIB_ISSUES placeholders"
           else
-            echo "⚠️ CONTRIBUTING.md may be too short ($WORD_COUNT words)" >> $GITHUB_STEP_SUMMARY
-            CONTRIB_ISSUES="$CONTRIB_ISSUES length"
+            echo "✅ All template placeholders replaced with content" >> $GITHUB_STEP_SUMMARY
           fi
 
           if [ -z "$CONTRIB_ISSUES" ]; then
